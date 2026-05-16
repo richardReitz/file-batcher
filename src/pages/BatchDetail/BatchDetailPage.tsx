@@ -16,16 +16,7 @@ export function BatchDetailPage() {
   const cancelBatch = useCancelBatch(id!)
   const retryBatch = useRetryBatch(id!)
 
-  if (isLoading) {
-    return (
-      <div className="space-y-4">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-24 w-full" />
-      </div>
-    )
-  }
-
-  if (isError || !batch) {
+  if (isError) {
     return <p className="text-red-600">Lote não encontrado.</p>
   }
 
@@ -40,57 +31,61 @@ export function BatchDetailPage() {
 
       <div className="bg-white rounded-lg border border-gray-200 p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
         <div>
-          <p className="text-xs text-gray-500">ID</p>
-          <p className="font-mono text-sm text-gray-700">{batch.id.slice(0, 8)}...</p>
+          <p className="text-xs text-gray-500 mb-1">ID</p>
+          {isLoading ? <Skeleton className="h-5 w-24" /> : <p className="font-mono text-sm text-gray-700">{batch!.id.slice(0, 8)}...</p>}
         </div>
         <div>
-          <p className="text-xs text-gray-500">Ação</p>
-          <StatusBadge status={batch.action} label={BATCH_ACTION_LABEL[batch.action]} />
+          <p className="text-xs text-gray-500 mb-1">Ação</p>
+          {isLoading ? <Skeleton className="h-6 w-20 rounded-md" /> : <StatusBadge status={batch!.action} label={BATCH_ACTION_LABEL[batch!.action]} />}
         </div>
         <div>
-          <p className="text-xs text-gray-500">Status</p>
-          <StatusBadge status={batch.status} label={BATCH_STATUS_LABEL[batch.status]} />
+          <p className="text-xs text-gray-500 mb-1">Status</p>
+          {isLoading ? <Skeleton className="h-6 w-20 rounded-md" /> : <StatusBadge status={batch!.status} label={BATCH_STATUS_LABEL[batch!.status]} />}
         </div>
         <div>
-          <p className="text-xs text-gray-500">Arquivo</p>
-          <p className="font-medium text-sm">{batch.name ?? '—'}</p>
+          <p className="text-xs text-gray-500 mb-1">Arquivo</p>
+          {isLoading ? <Skeleton className="h-5 w-36" /> : <p className="font-medium text-sm">{batch!.name ?? '—'}</p>}
         </div>
         <div>
-          <p className="text-xs text-gray-500">Atualizado em</p>
-          <p className="text-sm text-gray-700">{formatDate(batch.updatedAt)}</p>
+          <p className="text-xs text-gray-500 mb-1">Atualizado em</p>
+          {isLoading ? <Skeleton className="h-5 w-32" /> : <p className="text-sm text-gray-700">{formatDate(batch!.updatedAt)}</p>}
         </div>
       </div>
 
-      <div className="flex gap-2">
-        {batch.status === 'IMPORTED' && (
-          <Button
-            variant="outline"
-            className="text-red-600 border-red-300 hover:bg-red-50"
-            onClick={() => cancelBatch.mutate()}
-            disabled={cancelBatch.isPending}
-          >
-            Cancelar lote
-          </Button>
-        )}
-        {batch.status === 'ERROR' && (
-          <Button
-            variant="outline"
-            onClick={() => retryBatch.mutate()}
-            disabled={retryBatch.isPending}
-          >
-            <RotateCcw className="w-4 h-4 mr-2" />
-            Tentar novamente
-          </Button>
-        )}
-      </div>
+      {!isLoading && (
+        <>
+          <div className="flex gap-2">
+            {batch!.status === 'IMPORTED' && (
+              <Button
+                variant="outline"
+                className="text-red-600 border-red-300 hover:bg-red-50"
+                onClick={() => cancelBatch.mutate()}
+                disabled={cancelBatch.isPending}
+              >
+                Cancelar lote
+              </Button>
+            )}
+            {batch!.status === 'ERROR' && (
+              <Button
+                variant="outline"
+                onClick={() => retryBatch.mutate()}
+                disabled={retryBatch.isPending}
+              >
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Tentar novamente
+              </Button>
+            )}
+          </div>
 
-      {batch.status === 'PROCESSING' && (
-        <p className="text-sm text-blue-600 bg-blue-50 px-4 py-2 rounded-md">
-          Processando itens... isso pode levar alguns segundos.
-        </p>
+          {batch!.status === 'PROCESSING' && (
+            <p className="text-sm text-blue-600 bg-blue-50 px-4 py-2 rounded-md">
+              Processando itens... isso pode levar alguns segundos.
+            </p>
+          )}
+
+          <ItemList fileBatchId={batch!.id} />
+        </>
       )}
-
-      <ItemList fileBatchId={batch.id} />
     </div>
   )
 }
