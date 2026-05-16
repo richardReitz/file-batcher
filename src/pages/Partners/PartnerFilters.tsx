@@ -1,7 +1,12 @@
+import { useState, useEffect, useRef } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import type { PartnerListParams } from '@/types/partner'
+
+function toTitleCase(s: string) {
+  return s.replace(/\b\w/g, (c) => c.toUpperCase())
+}
 
 interface PartnerFiltersProps {
   value: PartnerListParams
@@ -9,33 +14,53 @@ interface PartnerFiltersProps {
 }
 
 export function PartnerFilters({ value, onChange }: PartnerFiltersProps) {
-  const debouncedNameChange = useDebouncedCallback(
-    (inputValue: string) => onChange({ ...value, nameContains: inputValue || undefined, page: 1 }),
-    300
-  )
+  const [nameInput, setNameInput] = useState(value.nameContains ?? '')
+  const [cpfInput, setCpfInput] = useState(value.documentEquals ?? '')
+  const valueRef = useRef(value)
+  valueRef.current = value
+
+  useEffect(() => { if (!value.nameContains) setNameInput('') }, [value.nameContains])
+  useEffect(() => { if (!value.documentEquals) setCpfInput('') }, [value.documentEquals])
+
+  const debouncedName = useDebouncedCallback((raw: string) => {
+    const normalized = toTitleCase(raw.trim())
+    onChange({ ...valueRef.current, nameContains: normalized || undefined, page: 1 })
+  }, 400)
+
+  const debouncedCpf = useDebouncedCallback((raw: string) => {
+    const digits = raw.replace(/\D/g, '')
+    onChange({ ...valueRef.current, documentEquals: digits || undefined, page: 1 })
+  }, 400)
 
   return (
     <div className="flex flex-wrap gap-3 items-end">
       <div>
         <label className="block text-xs text-gray-500 mb-1">Nome</label>
         <Input
-          key={value.nameContains ?? 'empty'}
           placeholder="Buscar por nome..."
-          defaultValue={value.nameContains ?? ''}
-          onChange={(e) => debouncedNameChange(e.target.value)}
+          value={nameInput}
+          onChange={(e) => { setNameInput(e.target.value); debouncedName(e.target.value) }}
           className="w-56"
         />
       </div>
       <div>
         <label className="block text-xs text-gray-500 mb-1">CPF</label>
         <Input
-          placeholder="CPF exato (11 dígitos)"
-          value={value.documentEquals ?? ''}
-          onChange={(e) => onChange({ ...value, documentEquals: e.target.value || undefined, page: 1 })}
+          placeholder="Buscar por CPF..."
+          value={cpfInput}
+          onChange={(e) => { setCpfInput(e.target.value); debouncedCpf(e.target.value) }}
           className="w-48"
         />
       </div>
-      <Button variant="ghost" size="sm" onClick={() => onChange({ page: 1, pageSize: value.pageSize })}>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => {
+          setNameInput('')
+          setCpfInput('')
+          onChange({ page: 1, pageSize: value.pageSize })
+        }}
+      >
         Limpar
       </Button>
     </div>
