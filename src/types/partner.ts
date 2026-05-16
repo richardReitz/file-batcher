@@ -2,11 +2,13 @@ export type PartnerStatus = 'ACTIVE' | 'INACTIVE'
 
 export interface Partner {
   id: string
-  nome: string
-  email: string
-  cpf: string
-  telefone: string
+  name: string | null
+  document: string | null
+  email: string | null
+  phone: string | null
   status: PartnerStatus
+  createdAt: string
+  updatedAt: string
 }
 
 export interface PartnerListParams {

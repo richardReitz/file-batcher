@@ -64,7 +64,7 @@ export function PartnersPage() {
             </TableRow>
           ))}
 
-          {!isLoading && data?.items.length === 0 && (
+          {!isLoading && (data?.items?.length ?? 0) === 0 && (
             <TableRow>
               <TableCell colSpan={6} className="text-center text-gray-400 py-10">
                 Nenhum parceiro encontrado.
@@ -72,12 +72,12 @@ export function PartnersPage() {
             </TableRow>
           )}
 
-          {data?.items.map((partner) => (
+          {data?.items?.map((partner) => (
             <TableRow key={partner.id}>
-              <TableCell className="font-medium">{partner.nome}</TableCell>
-              <TableCell className="font-mono text-sm">{formatCpf(partner.cpf)}</TableCell>
-              <TableCell className="text-sm text-gray-600">{partner.email}</TableCell>
-              <TableCell className="text-sm text-gray-600">{partner.telefone}</TableCell>
+              <TableCell className="font-medium">{partner.name ?? '—'}</TableCell>
+              <TableCell className="font-mono text-sm">{partner.document ? formatCpf(partner.document) : '—'}</TableCell>
+              <TableCell className="text-sm text-gray-600">{partner.email ?? '—'}</TableCell>
+              <TableCell className="text-sm text-gray-600">{partner.phone ?? '—'}</TableCell>
               <TableCell>
                 <StatusBadge status={partner.status} label={PARTNER_STATUS_LABEL[partner.status]} />
               </TableCell>
@@ -140,7 +140,7 @@ export function PartnersPage() {
         <ConfirmDialog
           open
           title={confirm.type === 'activate' ? 'Ativar parceiro' : 'Inativar parceiro'}
-          description={`Tem certeza que deseja ${confirm.type === 'activate' ? 'ativar' : 'inativar'} ${confirm.partner.nome}?`}
+          description={`Tem certeza que deseja ${confirm.type === 'activate' ? 'ativar' : 'inativar'} ${confirm.partner.name ?? 'este parceiro'}?`}
           confirmLabel={confirm.type === 'activate' ? 'Ativar' : 'Inativar'}
           loading={isPending}
           onConfirm={handleConfirm}
