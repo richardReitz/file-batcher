@@ -1,3 +1,4 @@
+import { useDebouncedCallback } from 'use-debounce'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import type { PartnerListParams } from '@/types/partner'
@@ -8,14 +9,20 @@ interface PartnerFiltersProps {
 }
 
 export function PartnerFilters({ value, onChange }: PartnerFiltersProps) {
+  const debouncedNameChange = useDebouncedCallback(
+    (inputValue: string) => onChange({ ...value, nameContains: inputValue || undefined, page: 1 }),
+    300
+  )
+
   return (
     <div className="flex flex-wrap gap-3 items-end">
       <div>
         <label className="block text-xs text-gray-500 mb-1">Nome</label>
         <Input
+          key={value.nameContains ?? 'empty'}
           placeholder="Buscar por nome..."
-          value={value.nameContains ?? ''}
-          onChange={(e) => onChange({ ...value, nameContains: e.target.value || undefined, page: 1 })}
+          defaultValue={value.nameContains ?? ''}
+          onChange={(e) => debouncedNameChange(e.target.value)}
           className="w-56"
         />
       </div>
