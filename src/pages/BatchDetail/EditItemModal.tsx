@@ -12,13 +12,18 @@ interface EditItemModalProps {
   onClose: () => void
 }
 
+function parseData(data: string | null): UpdateItemPayload {
+  if (!data) return { nome: '', email: '', cpf: '', telefone: '' }
+  try {
+    const p: Record<string, string> = JSON.parse(data)
+    return { nome: p['NOME'] ?? '', email: p['EMAIL'] ?? '', cpf: p['CPF'] ?? '', telefone: p['TELEFONE'] ?? '' }
+  } catch {
+    return { nome: '', email: '', cpf: '', telefone: '' }
+  }
+}
+
 export function EditItemModal({ item, fileBatchId, onClose }: EditItemModalProps) {
-  const [form, setForm] = useState<UpdateItemPayload>({
-    nome: item.nome,
-    email: item.email,
-    cpf: item.cpf,
-    telefone: item.telefone,
-  })
+  const [form, setForm] = useState<UpdateItemPayload>(() => parseData(item.data))
   const mutation = useUpdateItem(fileBatchId)
 
   function handleSubmit(e: React.FormEvent) {

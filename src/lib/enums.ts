@@ -17,7 +17,7 @@ export const BATCH_ACTION_LABEL: Record<BatchAction, string> = {
 
 export const ITEM_STATUS_LABEL: Record<ItemStatus, string> = {
   PENDING: 'Pendente',
-  SUCCESS: 'Sucesso',
+  PROCESSED: 'Processado',
   ERROR: 'Erro',
   IGNORED: 'Ignorado',
 }

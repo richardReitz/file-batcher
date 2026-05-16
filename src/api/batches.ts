@@ -7,8 +7,10 @@ export async function listBatches(params?: BatchListParams): Promise<Batch[]> {
 }
 
 export async function getBatch(id: string): Promise<Batch> {
-  const { data } = await client.get<Batch>(`/api/file-batches/${id}`)
-  return data
+  const batches = await listBatches()
+  const batch = batches.find((b) => b.id === id)
+  if (!batch) throw new Error('Lote não encontrado')
+  return batch
 }
 
 export async function importBatchToActive(file: File): Promise<Batch> {

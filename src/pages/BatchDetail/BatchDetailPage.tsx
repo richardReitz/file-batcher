@@ -52,8 +52,8 @@ export function BatchDetailPage() {
           <StatusBadge status={batch.status} label={BATCH_STATUS_LABEL[batch.status]} />
         </div>
         <div>
-          <p className="text-xs text-gray-500">Total de itens</p>
-          <p className="font-medium">{batch.totalItems}</p>
+          <p className="text-xs text-gray-500">Arquivo</p>
+          <p className="font-medium text-sm">{batch.name ?? '—'}</p>
         </div>
         <div>
           <p className="text-xs text-gray-500">Atualizado em</p>

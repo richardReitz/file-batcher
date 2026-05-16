@@ -12,21 +12,18 @@ const mockItems: Item[] = [
   {
     id: 'item-1',
     fileBatchId: 'batch-1',
-    nome: 'João Silva',
-    email: 'joao@test.com',
-    cpf: '12345678901',
-    telefone: '(11)99999-9999',
+    data: JSON.stringify({ NOME: 'João Silva', EMAIL: 'joao@test.com', CPF: '12345678901', TELEFONE: '(11)99999-9999' }),
     status: 'PENDING',
+    createdAt: '2024-01-15T10:00:00Z',
+    updatedAt: '2024-01-15T10:00:00Z',
   },
   {
     id: 'item-2',
     fileBatchId: 'batch-1',
-    nome: 'Maria Santos',
-    email: 'maria@test.com',
-    cpf: '98765432100',
-    telefone: '(11)88888-8888',
+    data: JSON.stringify({ NOME: 'Maria Santos', EMAIL: 'maria@test.com', CPF: '98765432100', TELEFONE: '(11)88888-8888' }),
     status: 'ERROR',
-    error: 'CPF inválido',
+    createdAt: '2024-01-15T10:00:00Z',
+    updatedAt: '2024-01-15T10:00:00Z',
   },
 ]
 
@@ -40,11 +37,6 @@ describe('ItemList', () => {
     renderWithProviders(<ItemList fileBatchId="batch-1" />)
     expect(await screen.findByText('João Silva')).toBeInTheDocument()
     expect(await screen.findByText('Maria Santos')).toBeInTheDocument()
-  })
-
-  it('shows error message inline for ERROR items', async () => {
-    renderWithProviders(<ItemList fileBatchId="batch-1" />)
-    expect(await screen.findByText('CPF inválido')).toBeInTheDocument()
   })
 
   it('shows Ignorar button for PENDING and ERROR items', async () => {

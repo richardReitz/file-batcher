@@ -10,17 +10,17 @@ vi.mock('@/api/batches')
 const mockBatches: Batch[] = [
   {
     id: 'abc-12345678',
+    name: 'lote-a.csv',
     action: 'TO_ACTIVE',
     status: 'IMPORTED',
-    totalItems: 10,
     updatedAt: '2024-01-15T10:00:00Z',
     createdAt: '2024-01-15T09:00:00Z',
   },
   {
     id: 'def-87654321',
+    name: 'lote-b.csv',
     action: 'TO_INACTIVE',
     status: 'PROCESSED',
-    totalItems: 5,
     updatedAt: '2024-01-14T10:00:00Z',
     createdAt: '2024-01-14T09:00:00Z',
   },

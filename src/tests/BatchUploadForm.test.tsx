@@ -10,9 +10,9 @@ vi.mock('@/api/batches')
 
 const mockBatch: Batch = {
   id: 'batch-1',
+  name: 'partners.csv',
   action: 'TO_ACTIVE',
   status: 'IMPORTED',
-  totalItems: 0,
   updatedAt: '2024-01-15T10:00:00Z',
   createdAt: '2024-01-15T10:00:00Z',
 }

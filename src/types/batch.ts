@@ -3,9 +3,9 @@ export type BatchAction = 'TO_ACTIVE' | 'TO_INACTIVE'
 
 export interface Batch {
   id: string
+  name: string | null
   action: BatchAction
   status: BatchStatus
-  totalItems: number
   updatedAt: string
   createdAt: string
 }

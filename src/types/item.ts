@@ -1,15 +1,12 @@
-export type ItemStatus = 'PENDING' | 'SUCCESS' | 'ERROR' | 'IGNORED'
+export type ItemStatus = 'PENDING' | 'PROCESSED' | 'ERROR' | 'IGNORED'
 
 export interface Item {
   id: string
   fileBatchId: string
-  nome: string
-  email: string
-  cpf: string
-  telefone: string
+  data: string | null
   status: ItemStatus
-  error?: string | null
-  lineNumber?: number
+  createdAt: string
+  updatedAt: string
 }
 
 export interface UpdateItemPayload {

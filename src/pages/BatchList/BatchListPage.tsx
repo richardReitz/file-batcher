@@ -68,7 +68,7 @@ export function BatchListPage() {
             <TableHead>ID</TableHead>
             <TableHead>Ação</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Itens</TableHead>
+            <TableHead>Arquivo</TableHead>
             <TableHead>Atualizado em</TableHead>
             <TableHead />
           </TableRow>
@@ -101,7 +101,7 @@ export function BatchListPage() {
               <TableCell>
                 <StatusBadge status={batch.status} label={BATCH_STATUS_LABEL[batch.status]} />
               </TableCell>
-              <TableCell>{batch.totalItems}</TableCell>
+              <TableCell className="text-sm text-gray-600 truncate max-w-[180px]">{batch.name ?? '—'}</TableCell>
               <TableCell className="text-sm text-gray-600">{formatDate(batch.updatedAt)}</TableCell>
               <TableCell>
                 <Button variant="ghost" size="sm" asChild>
