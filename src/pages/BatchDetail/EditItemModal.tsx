@@ -22,16 +22,36 @@ function parseData(data: string | null): UpdateItemPayload {
   }
 }
 
+function getErrors(form: UpdateItemPayload): Partial<Record<keyof UpdateItemPayload, string>> {
+  const errors: Partial<Record<keyof UpdateItemPayload, string>> = {}
+  if (form.cpf && form.cpf.length !== 11) errors.cpf = 'CPF deve ter 11 dígitos'
+  if (form.telefone && (form.telefone.length < 10 || form.telefone.length > 11)) errors.telefone = 'Telefone deve ter 10 ou 11 dígitos'
+  if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errors.email = 'Email inválido'
+  return errors
+}
+
+const fields: { key: keyof UpdateItemPayload; label: string; numeric?: boolean }[] = [
+  { key: 'nome', label: 'Nome' },
+  { key: 'email', label: 'Email' },
+  { key: 'cpf', label: 'CPF', numeric: true },
+  { key: 'telefone', label: 'Telefone', numeric: true },
+]
+
 export function EditItemModal({ item, fileBatchId, onClose }: EditItemModalProps) {
   const [form, setForm] = useState<UpdateItemPayload>(() => parseData(item.data))
   const mutation = useUpdateItem(fileBatchId)
+  const errors = getErrors(form)
+  const hasErrors = Object.keys(errors).length > 0
+
+  function handleChange(key: keyof UpdateItemPayload, value: string, numeric?: boolean) {
+    const normalized = numeric ? value.replace(/\D/g, '').slice(0, 11) : value
+    setForm((f) => ({ ...f, [key]: normalized }))
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    mutation.mutate(
-      { itemId: item.id, payload: form },
-      { onSuccess: onClose }
-    )
+    if (hasErrors) return
+    mutation.mutate({ itemId: item.id, payload: form }, { onSuccess: onClose })
   }
 
   return (
@@ -41,14 +61,19 @@ export function EditItemModal({ item, fileBatchId, onClose }: EditItemModalProps
           <DialogTitle>Corrigir item</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {(['nome', 'email', 'cpf', 'telefone'] as const).map((field) => (
-            <div key={field} className="flex flex-col gap-1.5">
-              <Label htmlFor={field} className="capitalize">{field}</Label>
+          {fields.map(({ key, label, numeric }) => (
+            <div key={key} className="flex flex-col gap-1.5">
+              <Label htmlFor={key}>{label}</Label>
               <Input
-                id={field}
-                value={form[field]}
-                onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
+                id={key}
+                value={form[key]}
+                inputMode={numeric ? 'numeric' : undefined}
+                onChange={(e) => handleChange(key, e.target.value, numeric)}
+                className={errors[key] ? 'border-red-400 focus-visible:ring-red-400' : ''}
               />
+              {errors[key] && (
+                <p className="text-xs text-red-500">{errors[key]}</p>
+              )}
             </div>
           ))}
           {mutation.isError && (
@@ -56,7 +81,7 @@ export function EditItemModal({ item, fileBatchId, onClose }: EditItemModalProps
           )}
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose}>Cancelar</Button>
-            <Button type="submit" disabled={mutation.isPending}>
+            <Button type="submit" disabled={mutation.isPending || hasErrors}>
               {mutation.isPending ? 'Salvando...' : 'Salvar'}
             </Button>
           </DialogFooter>
