@@ -42,7 +42,7 @@ export function EditItemModal({ item, fileBatchId, onClose }: EditItemModalProps
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           {(['nome', 'email', 'cpf', 'telefone'] as const).map((field) => (
-            <div key={field}>
+            <div key={field} className="flex flex-col gap-1.5">
               <Label htmlFor={field} className="capitalize">{field}</Label>
               <Input
                 id={field}

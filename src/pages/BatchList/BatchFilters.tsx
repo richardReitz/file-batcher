@@ -25,11 +25,12 @@ export function BatchFilters({ value, onChange }: BatchFiltersProps) {
   return (
     <div className="flex flex-wrap gap-3 items-end">
       <div className="w-44">
+        <label className="block text-xs text-gray-500 mb-1">Status</label>
         <Select
           value={value.status ?? 'all'}
           onValueChange={(v) => onChange({ ...value, status: v === 'all' ? undefined : v as BatchStatus })}
         >
-          <SelectTrigger><SelectValue placeholder="Status" /></SelectTrigger>
+          <SelectTrigger><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos os status</SelectItem>
             {STATUS_OPTIONS.map((o) => (
@@ -40,11 +41,12 @@ export function BatchFilters({ value, onChange }: BatchFiltersProps) {
       </div>
 
       <div className="w-44">
+        <label className="block text-xs text-gray-500 mb-1">Ação</label>
         <Select
           value={value.action ?? 'all'}
           onValueChange={(v) => onChange({ ...value, action: v === 'all' ? undefined : v as BatchAction })}
         >
-          <SelectTrigger><SelectValue placeholder="Ação" /></SelectTrigger>
+          <SelectTrigger><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todas as ações</SelectItem>
             {ACTION_OPTIONS.map((o) => (
