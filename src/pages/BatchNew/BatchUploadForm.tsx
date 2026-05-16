@@ -23,7 +23,7 @@ export function BatchUploadForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <Tabs value={activeTab} onValueChange={(v) => { setActiveTab(v as BatchAction); setFile(null) }}>
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as BatchAction)}>
         <TabsList className="w-full">
           <TabsTrigger
             value="TO_ACTIVE"
