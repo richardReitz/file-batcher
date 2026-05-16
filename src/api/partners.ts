@@ -1,5 +1,5 @@
 import { client } from './client'
-import type { Partner, PartnerListParams, PaginatedPartners } from '@/types/partner'
+import type { PartnerListParams, PaginatedPartners } from '@/types/partner'
 
 export async function listPartners(params?: PartnerListParams): Promise<PaginatedPartners> {
   const { data } = await client.get<PaginatedPartners>('/api/partners', { params })
