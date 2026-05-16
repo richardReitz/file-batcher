@@ -7,6 +7,7 @@ export function useStartProcessing() {
     mutationFn: startProcessing,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['batches'] })
+      queryClient.invalidateQueries({ queryKey: ['batch'] })
     },
   })
 }

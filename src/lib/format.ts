@@ -1,5 +1,6 @@
 export function formatDate(iso: string): string {
-  return new Date(iso).toLocaleString('pt-BR', {
+  const normalized = iso.endsWith('Z') || iso.includes('+') ? iso : iso + 'Z'
+  return new Date(normalized).toLocaleString('pt-BR', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',

@@ -6,6 +6,7 @@ export function useRetryBatch(id: string) {
   return useMutation({
     mutationFn: () => retryBatch(id),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['batches'] })
       queryClient.invalidateQueries({ queryKey: ['batch', id] })
       queryClient.invalidateQueries({ queryKey: ['items', id] })
     },

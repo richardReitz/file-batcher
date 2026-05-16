@@ -5,7 +5,11 @@ export function useBatchDetail(id: string) {
   return useQuery({
     queryKey: ['batch', id],
     queryFn: () => getBatch(id),
-    refetchInterval: (query) =>
-      query.state.data?.status === 'PROCESSING' ? 3000 : false,
+    refetchInterval: (query) => {
+      const status = query.state.data?.status
+      if (status === 'PROCESSING') return 3000
+      if (status === 'IMPORTED') return 5000
+      return false
+    },
   })
 }
