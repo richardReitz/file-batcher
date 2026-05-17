@@ -10,7 +10,7 @@ export function useStartProcessing() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['batches'] })
       queryClient.invalidateQueries({ queryKey: ['batch'] })
-      toast({ title: 'Processamento concluído', description: 'Verifique os detalhes do lote para ver o resultado.' })
+      toast({ title: 'Processamento iniciado', description: 'Os itens estão sendo processados em segundo plano.' })
     },
   })
 }

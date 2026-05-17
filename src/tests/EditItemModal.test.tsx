@@ -19,7 +19,7 @@ const mockItem: Item = {
 
 describe('EditItemModal', () => {
   beforeEach(() => {
-    vi.mocked(itemsApi.updateItem).mockResolvedValue({ ...mockItem, status: 'PENDING' })
+    vi.mocked(itemsApi.updateItem).mockResolvedValue({ ...mockItem, status: 'PROCESSED' })
     vi.mocked(itemsApi.listItems).mockResolvedValue([])
     vi.useFakeTimers({ shouldAdvanceTime: true })
   })
@@ -28,15 +28,15 @@ describe('EditItemModal', () => {
     vi.useRealTimers()
   })
 
-  it('exibe estado de sucesso após salvar', async () => {
+  it('exibe estado de sucesso quando API retorna PROCESSED', async () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
     const onClose = vi.fn()
     renderWithProviders(<EditItemModal item={mockItem} fileBatchId="batch-1" onClose={onClose} />)
 
     await user.click(screen.getByRole('button', { name: /salvar/i }))
 
-    expect(await screen.findByText('Item corrigido!')).toBeInTheDocument()
-    expect(screen.getByText(/será reprocessado/i)).toBeInTheDocument()
+    expect(await screen.findByText('Item processado!')).toBeInTheDocument()
+    expect(screen.getByText(/processado com sucesso/i)).toBeInTheDocument()
     expect(screen.getByText(/fechando automaticamente/i)).toBeInTheDocument()
   })
 
@@ -46,10 +46,23 @@ describe('EditItemModal', () => {
     renderWithProviders(<EditItemModal item={mockItem} fileBatchId="batch-1" onClose={onClose} />)
 
     await user.click(screen.getByRole('button', { name: /salvar/i }))
-    await screen.findByText('Item corrigido!')
+    await screen.findByText('Item processado!')
 
     expect(onClose).not.toHaveBeenCalled()
     vi.advanceTimersByTime(1500)
     await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1))
+  })
+
+  it('exibe erro inline quando API retorna item com status ERROR', async () => {
+    vi.mocked(itemsApi.updateItem).mockResolvedValue({ ...mockItem, status: 'ERROR' })
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+    const onClose = vi.fn()
+    renderWithProviders(<EditItemModal item={mockItem} fileBatchId="batch-1" onClose={onClose} />)
+
+    await user.click(screen.getByRole('button', { name: /salvar/i }))
+
+    expect(await screen.findByText(/não pôde ser processado/i)).toBeInTheDocument()
+    expect(screen.queryByText('Item processado!')).not.toBeInTheDocument()
+    expect(onClose).not.toHaveBeenCalled()
   })
 })

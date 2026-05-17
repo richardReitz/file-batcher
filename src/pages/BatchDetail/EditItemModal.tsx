@@ -52,12 +52,15 @@ export function EditItemModal({ item, fileBatchId, onClose }: EditItemModalProps
   const onCloseRef = useRef(onClose)
   useEffect(() => { onCloseRef.current = onClose }, [onClose])
 
+  const processedOk = mutation.isSuccess && mutation.data?.status === 'PROCESSED'
+  const savedAsError = mutation.isSuccess && mutation.data?.status !== 'PROCESSED'
+
   useEffect(() => {
-    if (!mutation.isSuccess) return
+    if (!processedOk) return
     setShowSuccess(true)
     const timer = setTimeout(() => onCloseRef.current(), 1500)
     return () => clearTimeout(timer)
-  }, [mutation.isSuccess])
+  }, [processedOk])
 
   function handleChange(key: keyof UpdateItemPayload, value: string, numeric?: boolean) {
     const normalized = numeric ? value.replace(/\D/g, '').slice(0, 11) : value
@@ -82,9 +85,9 @@ export function EditItemModal({ item, fileBatchId, onClose }: EditItemModalProps
             <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
               <CheckCircle2 className="w-6 h-6 text-green-600" />
             </div>
-            <p className="font-semibold text-gray-900 text-base">Item corrigido!</p>
+            <p className="font-semibold text-gray-900 text-base">Item processado!</p>
             <p className="text-sm text-gray-500">
-              Os dados foram salvos.<br />O item será reprocessado em breve.
+              Os dados foram corrigidos e o item foi processado com sucesso.
             </p>
             <p className="text-xs text-gray-400 mt-1">Fechando automaticamente...</p>
           </div>
@@ -107,6 +110,11 @@ export function EditItemModal({ item, fileBatchId, onClose }: EditItemModalProps
             ))}
             {mutation.isError && (
               <p className="text-sm text-red-600">{mutation.error?.message}</p>
+            )}
+            {savedAsError && (
+              <p className="text-sm text-red-600">
+                Os dados foram salvos, mas o item não pôde ser processado. Verifique os campos e tente novamente.
+              </p>
             )}
             <DialogFooter className="flex-row gap-2">
               <Button type="button" variant="outline" className="flex-1" onClick={onClose}>Cancelar</Button>
