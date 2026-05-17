@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { CheckCircle2 } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -44,9 +45,17 @@ const fields: { key: keyof UpdateItemPayload; label: string; numeric?: boolean }
 
 export function EditItemModal({ item, fileBatchId, onClose }: EditItemModalProps) {
   const [form, setForm] = useState<UpdateItemPayload>(() => parseData(item.data))
+  const [showSuccess, setShowSuccess] = useState(false)
   const mutation = useUpdateItem(fileBatchId)
   const errors = getErrors(form)
   const hasErrors = Object.keys(errors).length > 0
+
+  useEffect(() => {
+    if (!mutation.isSuccess) return
+    setShowSuccess(true)
+    const timer = setTimeout(onClose, 1500)
+    return () => clearTimeout(timer)
+  }, [mutation.isSuccess, onClose])
 
   function handleChange(key: keyof UpdateItemPayload, value: string, numeric?: boolean) {
     const normalized = numeric ? value.replace(/\D/g, '').slice(0, 11) : value
@@ -56,7 +65,7 @@ export function EditItemModal({ item, fileBatchId, onClose }: EditItemModalProps
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (hasErrors) return
-    mutation.mutate({ itemId: item.id, payload: form }, { onSuccess: onClose })
+    mutation.mutate({ itemId: item.id, payload: form })
   }
 
   return (
@@ -65,32 +74,46 @@ export function EditItemModal({ item, fileBatchId, onClose }: EditItemModalProps
         <DialogHeader>
           <DialogTitle>Corrigir item</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {fields.map(({ key, label, numeric }) => (
-            <div key={key} className="flex flex-col gap-1.5">
-              <Label htmlFor={key}>{label}</Label>
-              <Input
-                id={key}
-                value={form[key]}
-                inputMode={numeric ? 'numeric' : undefined}
-                onChange={(e) => handleChange(key, e.target.value, numeric)}
-                className={errors[key] ? 'border-red-400 focus-visible:ring-red-400' : ''}
-              />
-              {errors[key] && (
-                <p className="text-xs text-red-500">{errors[key]}</p>
-              )}
+
+        {showSuccess ? (
+          <div className="flex flex-col items-center gap-3 py-8 px-4 text-center">
+            <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+              <CheckCircle2 className="w-6 h-6 text-green-600" />
             </div>
-          ))}
-          {mutation.isError && (
-            <p className="text-sm text-red-600">{mutation.error?.message}</p>
-          )}
-          <DialogFooter className="flex-row gap-2">
-            <Button type="button" variant="outline" className="flex-1" onClick={onClose}>Cancelar</Button>
-            <Button type="submit" className="flex-1" disabled={mutation.isPending || hasErrors}>
-              {mutation.isPending ? 'Salvando...' : 'Salvar'}
-            </Button>
-          </DialogFooter>
-        </form>
+            <p className="font-semibold text-gray-900 text-base">Item corrigido!</p>
+            <p className="text-sm text-gray-500">
+              Os dados foram salvos.<br />O item será reprocessado em breve.
+            </p>
+            <p className="text-xs text-gray-400 mt-1">Fechando automaticamente...</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {fields.map(({ key, label, numeric }) => (
+              <div key={key} className="flex flex-col gap-1.5">
+                <Label htmlFor={key}>{label}</Label>
+                <Input
+                  id={key}
+                  value={form[key]}
+                  inputMode={numeric ? 'numeric' : undefined}
+                  onChange={(e) => handleChange(key, e.target.value, numeric)}
+                  className={errors[key] ? 'border-red-400 focus-visible:ring-red-400' : ''}
+                />
+                {errors[key] && (
+                  <p className="text-xs text-red-500">{errors[key]}</p>
+                )}
+              </div>
+            ))}
+            {mutation.isError && (
+              <p className="text-sm text-red-600">{mutation.error?.message}</p>
+            )}
+            <DialogFooter className="flex-row gap-2">
+              <Button type="button" variant="outline" className="flex-1" onClick={onClose}>Cancelar</Button>
+              <Button type="submit" className="flex-1" disabled={mutation.isPending || hasErrors}>
+                {mutation.isPending ? 'Salvando...' : 'Salvar'}
+              </Button>
+            </DialogFooter>
+          </form>
+        )}
       </DialogContent>
     </Dialog>
   )
