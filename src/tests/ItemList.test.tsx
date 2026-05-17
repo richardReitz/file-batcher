@@ -56,4 +56,10 @@ describe('ItemList', () => {
       expect(itemsApi.ignoreItem).toHaveBeenCalledWith('batch-1', 'item-1')
     })
   })
+
+  it('renderiza ItemSummaryBar com contagem de status', async () => {
+    renderWithProviders(<ItemList fileBatchId="batch-1" batchStatus="PROCESSED" />)
+    expect(await screen.findByText('pendentes')).toBeInTheDocument()
+    expect(await screen.findByText('com erro')).toBeInTheDocument()
+  })
 })

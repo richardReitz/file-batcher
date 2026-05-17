@@ -5,11 +5,13 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { StatusBadge } from '@/components/StatusBadge'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { EditItemModal } from './EditItemModal'
+import { ItemSummaryBar } from './ItemSummaryBar'
 import { useItems } from '@/hooks/useItems'
 import { useIgnoreItem } from '@/hooks/useIgnoreItem'
 import { ITEM_STATUS_LABEL } from '@/lib/enums'
 import { formatCpf } from '@/lib/format'
 import type { Item } from '@/types/item'
+import type { BatchStatus } from '@/types/batch'
 
 function parseItemData(data: string | null): { nome: string; email: string; cpf: string } {
   if (!data) return { nome: '—', email: '—', cpf: '—' }
@@ -27,16 +29,21 @@ function parseItemData(data: string | null): { nome: string; email: string; cpf:
 
 interface ItemListProps {
   fileBatchId: string
+  batchStatus?: BatchStatus
 }
 
-export function ItemList({ fileBatchId }: ItemListProps) {
-  const { data: items, isLoading } = useItems(fileBatchId)
+export function ItemList({ fileBatchId, batchStatus }: ItemListProps) {
+  const { data: items, isLoading, isFetching } = useItems(fileBatchId, batchStatus)
   const ignoreItem = useIgnoreItem(fileBatchId)
   const [confirmIgnore, setConfirmIgnore] = useState<Item | null>(null)
   const [editItem, setEditItem] = useState<Item | null>(null)
 
   return (
     <>
+      {!isLoading && items && (
+        <ItemSummaryBar items={items} isFetching={isFetching} />
+      )}
+
       <Table>
         <TableHeader>
           <TableRow>
