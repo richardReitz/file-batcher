@@ -57,7 +57,6 @@ export function ItemList({ fileBatchId }: ItemListProps) {
               <TableCell>
                 <div className="flex gap-1 whitespace-nowrap">
                   <Skeleton className="h-8 w-14 rounded-md" />
-                  <Skeleton className="h-8 w-16 rounded-md" />
                 </div>
               </TableCell>
             </TableRow>
@@ -84,7 +83,6 @@ export function ItemList({ fileBatchId }: ItemListProps) {
               <TableCell>
                 <div className="flex gap-1 whitespace-nowrap">
                   {(item.status === 'PENDING' || item.status === 'ERROR') && (
-                    <>
                       <Button
                         variant="ghost"
                         size="sm"
@@ -92,6 +90,8 @@ export function ItemList({ fileBatchId }: ItemListProps) {
                       >
                         Ignorar
                       </Button>
+                    )}
+                  {item.status === 'ERROR' && (
                       <Button
                         variant="ghost"
                         size="sm"
@@ -99,8 +99,7 @@ export function ItemList({ fileBatchId }: ItemListProps) {
                       >
                         Corrigir
                       </Button>
-                    </>
-                  )}
+                    )}
                 </div>
               </TableCell>
             </TableRow>
