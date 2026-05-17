@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { CheckCircle2 } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
@@ -49,13 +49,15 @@ export function EditItemModal({ item, fileBatchId, onClose }: EditItemModalProps
   const mutation = useUpdateItem(fileBatchId)
   const errors = getErrors(form)
   const hasErrors = Object.keys(errors).length > 0
+  const onCloseRef = useRef(onClose)
+  useEffect(() => { onCloseRef.current = onClose }, [onClose])
 
   useEffect(() => {
     if (!mutation.isSuccess) return
     setShowSuccess(true)
-    const timer = setTimeout(onClose, 1500)
+    const timer = setTimeout(() => onCloseRef.current(), 1500)
     return () => clearTimeout(timer)
-  }, [mutation.isSuccess, onClose])
+  }, [mutation.isSuccess])
 
   function handleChange(key: keyof UpdateItemPayload, value: string, numeric?: boolean) {
     const normalized = numeric ? value.replace(/\D/g, '').slice(0, 11) : value
