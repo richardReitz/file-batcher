@@ -44,7 +44,7 @@ export function BatchListPage() {
                 <>
                   <Play className="w-4 h-4 sm:mr-2" />
                   <span className="hidden sm:inline">
-                    Iniciar Processamento{importedCount > 1 ? ` (${importedCount})` : ''}
+                    {importedCount > 1 ? `Processar próximo (${importedCount} na fila)` : 'Iniciar Processamento'}
                   </span>
                 </>
               )}
@@ -58,12 +58,6 @@ export function BatchListPage() {
           </Button>
         </div>
       </div>
-
-      {isProcessing && (
-        <p className="text-sm text-blue-600 bg-blue-50 px-4 py-2 rounded-md">
-          Processando itens... isso pode levar alguns segundos.
-        </p>
-      )}
 
       <BatchFilters value={filters} onChange={setFilters} />
 
