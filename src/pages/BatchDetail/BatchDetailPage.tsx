@@ -83,7 +83,7 @@ export function BatchDetailPage() {
             </p>
           )}
 
-          <ItemList fileBatchId={batch!.id} />
+          <ItemList fileBatchId={batch!.id} batchStatus={batch!.status} />
         </>
       )}
     </div>
