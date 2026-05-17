@@ -8,7 +8,7 @@ export function useItems(fileBatchId: string, batchStatus?: BatchStatus) {
     queryFn: () => listItems(fileBatchId),
     refetchInterval: (query) => {
       if (batchStatus === 'PROCESSING') return 3000
-      if (query.state.data?.some((item) => item.status === 'PENDING')) return 3000
+      if (batchStatus !== 'IMPORTED' && query.state.data?.some((item) => item.status === 'PENDING')) return 3000
       return false
     },
   })

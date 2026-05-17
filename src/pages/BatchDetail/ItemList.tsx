@@ -45,7 +45,7 @@ export function ItemList({ fileBatchId, batchStatus }: ItemListProps) {
           items={items}
           isFetching={isFetching && (
             batchStatus === 'PROCESSING' ||
-            items.some((i) => i.status === 'PENDING')
+            (batchStatus !== 'IMPORTED' && items.some((i) => i.status === 'PENDING'))
           )}
         />
       )}
