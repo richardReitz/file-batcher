@@ -23,14 +23,14 @@ const ACTION_OPTIONS: { value: BatchAction; label: string }[] = [
 
 export function BatchFilters({ value, onChange }: BatchFiltersProps) {
   return (
-    <div className="flex flex-wrap gap-3 items-end">
-      <div className="w-44">
+    <div className="grid grid-cols-2 gap-3 items-end lg:flex lg:flex-wrap">
+      <div className="lg:w-44">
         <label className="block text-xs text-gray-500 mb-1">Status</label>
         <Select
           value={value.status ?? 'all'}
           onValueChange={(v) => onChange({ ...value, status: v === 'all' ? undefined : v as BatchStatus })}
         >
-          <SelectTrigger><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos os status</SelectItem>
             {STATUS_OPTIONS.map((o) => (
@@ -40,13 +40,13 @@ export function BatchFilters({ value, onChange }: BatchFiltersProps) {
         </Select>
       </div>
 
-      <div className="w-44">
+      <div className="lg:w-44">
         <label className="block text-xs text-gray-500 mb-1">Ação</label>
         <Select
           value={value.action ?? 'all'}
           onValueChange={(v) => onChange({ ...value, action: v === 'all' ? undefined : v as BatchAction })}
         >
-          <SelectTrigger><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todas as ações</SelectItem>
             {ACTION_OPTIONS.map((o) => (
@@ -56,33 +56,31 @@ export function BatchFilters({ value, onChange }: BatchFiltersProps) {
         </Select>
       </div>
 
-      <div>
+      <div className="lg:w-40">
         <label className="block text-xs text-gray-500 mb-1">De</label>
         <Input
           type="date"
           value={value.fromUpdatedAt?.split('T')[0] ?? ''}
           onChange={(e) => onChange({ ...value, fromUpdatedAt: e.target.value ? `${e.target.value}T00:00:00Z` : undefined })}
-          className="w-40"
+          className="w-full"
         />
       </div>
 
-      <div>
+      <div className="lg:w-40">
         <label className="block text-xs text-gray-500 mb-1">Até</label>
         <Input
           type="date"
           value={value.toUpdatedAt?.split('T')[0] ?? ''}
           onChange={(e) => onChange({ ...value, toUpdatedAt: e.target.value ? `${e.target.value}T23:59:59Z` : undefined })}
-          className="w-40"
+          className="w-full"
         />
       </div>
 
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => onChange({})}
-      >
-        Limpar
-      </Button>
+      <div className="col-span-2 lg:col-auto flex items-end">
+        <Button variant="ghost" size="sm" onClick={() => onChange({})}>
+          Limpar
+        </Button>
+      </div>
     </div>
   )
 }

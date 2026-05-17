@@ -41,8 +41,8 @@ export function ItemList({ fileBatchId }: ItemListProps) {
         <TableHeader>
           <TableRow>
             <TableHead>Nome</TableHead>
-            <TableHead>CPF</TableHead>
-            <TableHead>Email</TableHead>
+            <TableHead className="hidden sm:table-cell">CPF</TableHead>
+            <TableHead className="hidden lg:table-cell">Email</TableHead>
             <TableHead>Status</TableHead>
             <TableHead />
           </TableRow>
@@ -51,11 +51,11 @@ export function ItemList({ fileBatchId }: ItemListProps) {
           {isLoading && Array.from({ length: 5 }).map((_, i) => (
             <TableRow key={i}>
               <TableCell><Skeleton className={`h-4 rounded ${i % 3 === 0 ? 'w-32' : i % 3 === 1 ? 'w-40' : 'w-28'}`} /></TableCell>
-              <TableCell><Skeleton className="h-4 w-28 rounded font-mono" /></TableCell>
-              <TableCell><Skeleton className={`h-4 rounded ${i % 2 === 0 ? 'w-48' : 'w-40'}`} /></TableCell>
+              <TableCell className="hidden sm:table-cell"><Skeleton className="h-4 w-28 rounded" /></TableCell>
+              <TableCell className="hidden lg:table-cell"><Skeleton className={`h-4 rounded ${i % 2 === 0 ? 'w-48' : 'w-40'}`} /></TableCell>
               <TableCell><Skeleton className="h-6 w-20 rounded-md" /></TableCell>
               <TableCell>
-                <div className="flex gap-1">
+                <div className="flex gap-1 whitespace-nowrap">
                   <Skeleton className="h-8 w-14 rounded-md" />
                   <Skeleton className="h-8 w-16 rounded-md" />
                 </div>
@@ -76,13 +76,13 @@ export function ItemList({ fileBatchId }: ItemListProps) {
             return (
             <TableRow key={item.id}>
               <TableCell className="font-medium">{nome}</TableCell>
-              <TableCell className="font-mono text-sm">{formatCpf(cpf)}</TableCell>
-              <TableCell className="text-sm text-gray-600">{email}</TableCell>
+              <TableCell className="hidden sm:table-cell font-mono text-sm whitespace-nowrap">{formatCpf(cpf)}</TableCell>
+              <TableCell className="hidden lg:table-cell text-sm text-gray-600">{email}</TableCell>
               <TableCell>
                 <StatusBadge status={item.status} label={ITEM_STATUS_LABEL[item.status]} />
               </TableCell>
               <TableCell>
-                <div className="flex gap-1">
+                <div className="flex gap-1 whitespace-nowrap">
                   {(item.status === 'PENDING' || item.status === 'ERROR') && (
                     <>
                       <Button

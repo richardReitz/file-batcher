@@ -16,7 +16,12 @@ function parseData(data: string | null): UpdateItemPayload {
   if (!data) return { nome: '', email: '', cpf: '', telefone: '' }
   try {
     const p: Record<string, string> = JSON.parse(data)
-    return { nome: p['NOME'] ?? '', email: p['EMAIL'] ?? '', cpf: p['CPF'] ?? '', telefone: p['TELEFONE'] ?? '' }
+    return {
+      nome: p['NOME'] ?? '',
+      email: p['EMAIL'] ?? '',
+      cpf: (p['CPF'] ?? '').replace(/\D/g, '').slice(0, 11),
+      telefone: (p['TELEFONE'] ?? '').replace(/\D/g, '').slice(0, 11),
+    }
   } catch {
     return { nome: '', email: '', cpf: '', telefone: '' }
   }
@@ -79,9 +84,9 @@ export function EditItemModal({ item, fileBatchId, onClose }: EditItemModalProps
           {mutation.isError && (
             <p className="text-sm text-red-600">{mutation.error?.message}</p>
           )}
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>Cancelar</Button>
-            <Button type="submit" disabled={mutation.isPending || hasErrors}>
+          <DialogFooter className="flex-row gap-2">
+            <Button type="button" variant="outline" className="flex-1" onClick={onClose}>Cancelar</Button>
+            <Button type="submit" className="flex-1" disabled={mutation.isPending || hasErrors}>
               {mutation.isPending ? 'Salvando...' : 'Salvar'}
             </Button>
           </DialogFooter>

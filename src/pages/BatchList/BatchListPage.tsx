@@ -24,9 +24,9 @@ export function BatchListPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      <div className="flex items-center justify-between gap-3">
         <h1 className="text-2xl font-semibold text-gray-900">Lotes</h1>
-        <div className="flex gap-2">
+        <div className="flex gap-2 shrink-0">
           {!isLoading && (
             <Button
               variant="outline"
@@ -35,16 +35,22 @@ export function BatchListPage() {
               aria-label="Iniciar processamento"
             >
               {startProcessing.isPending || isProcessing ? (
-                <><RotateCcw className="w-4 h-4 mr-2 animate-spin" />Processando...</>
+                <>
+                  <RotateCcw className="w-4 h-4 animate-spin sm:mr-2" />
+                  <span className="hidden sm:inline">Processando...</span>
+                </>
               ) : (
-                <><Play className="w-4 h-4 mr-2" />Iniciar Processamento</>
+                <>
+                  <Play className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Iniciar Processamento</span>
+                </>
               )}
             </Button>
           )}
           <Button asChild>
             <Link to="/batches/new">
-              <Plus className="w-4 h-4 mr-2" />
-              Novo Lote
+              <Plus className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Novo Lote</span>
             </Link>
           </Button>
         </div>
@@ -65,23 +71,23 @@ export function BatchListPage() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>ID</TableHead>
+            <TableHead className="hidden sm:table-cell">ID</TableHead>
             <TableHead>Ação</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Arquivo</TableHead>
-            <TableHead>Atualizado em</TableHead>
+            <TableHead className="hidden lg:table-cell">Atualizado em</TableHead>
             <TableHead />
           </TableRow>
         </TableHeader>
         <TableBody>
           {isLoading && Array.from({ length: 5 }).map((_, i) => (
             <TableRow key={i}>
-              <TableCell><Skeleton className="h-3.5 w-24 rounded" /></TableCell>
+              <TableCell className="hidden sm:table-cell"><Skeleton className="h-3.5 w-24 rounded" /></TableCell>
               <TableCell><Skeleton className="h-6 w-16 rounded-md" /></TableCell>
               <TableCell><Skeleton className="h-6 w-20 rounded-md" /></TableCell>
               <TableCell><Skeleton className={`h-4 rounded ${i % 2 === 0 ? 'w-36' : 'w-28'}`} /></TableCell>
-              <TableCell><Skeleton className="h-4 w-32 rounded" /></TableCell>
-              <TableCell><Skeleton className="h-8 w-20 rounded-md" /></TableCell>
+              <TableCell className="hidden lg:table-cell"><Skeleton className="h-4 w-32 rounded" /></TableCell>
+              <TableCell><Skeleton className="h-8 w-16 rounded-md" /></TableCell>
             </TableRow>
           ))}
 
@@ -95,7 +101,7 @@ export function BatchListPage() {
 
           {batches?.map((batch) => (
             <TableRow key={batch.id}>
-              <TableCell className="font-mono text-xs text-gray-500">
+              <TableCell className="hidden sm:table-cell font-mono text-xs text-gray-500">
                 {batch.id.slice(0, 8)}...
               </TableCell>
               <TableCell>
@@ -104,11 +110,14 @@ export function BatchListPage() {
               <TableCell>
                 <StatusBadge status={batch.status} label={BATCH_STATUS_LABEL[batch.status]} />
               </TableCell>
-              <TableCell className="text-sm text-gray-600 truncate max-w-[180px]">{batch.name ?? '—'}</TableCell>
-              <TableCell className="text-sm text-gray-600">{formatDate(batch.updatedAt)}</TableCell>
+              <TableCell className="text-sm text-gray-600 truncate max-w-[140px] sm:max-w-[180px]">{batch.name ?? '—'}</TableCell>
+              <TableCell className="hidden lg:table-cell text-sm text-gray-600">{formatDate(batch.updatedAt)}</TableCell>
               <TableCell>
                 <Button variant="ghost" size="sm" asChild>
-                  <Link to={`/batches/${batch.id}`}>Ver detalhes</Link>
+                  <Link to={`/batches/${batch.id}`}>
+                    <span className="sm:hidden">Ver</span>
+                    <span className="hidden sm:inline">Ver detalhes</span>
+                  </Link>
                 </Button>
               </TableCell>
             </TableRow>

@@ -29,7 +29,7 @@ export function BatchDetailPage() {
         <h1 className="text-2xl font-semibold text-gray-900">Detalhe do Lote</h1>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="bg-white rounded-lg border border-gray-200 p-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <div>
           <p className="text-xs text-gray-500 mb-1">ID</p>
           {isLoading ? <Skeleton className="h-5 w-24" /> : <p className="font-mono text-sm text-gray-700">{batch!.id.slice(0, 8)}...</p>}
@@ -44,7 +44,7 @@ export function BatchDetailPage() {
         </div>
         <div>
           <p className="text-xs text-gray-500 mb-1">Arquivo</p>
-          {isLoading ? <Skeleton className="h-5 w-36" /> : <p className="font-medium text-sm">{batch!.name ?? '—'}</p>}
+          {isLoading ? <Skeleton className="h-5 w-36" /> : <p className="font-medium text-sm truncate overflow-hidden">{batch!.name ?? '—'}</p>}
         </div>
         <div>
           <p className="text-xs text-gray-500 mb-1">Atualizado em</p>

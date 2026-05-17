@@ -33,36 +33,38 @@ export function PartnerFilters({ value, onChange }: PartnerFiltersProps) {
   }, 400)
 
   return (
-    <div className="flex flex-wrap gap-3 items-end">
-      <div>
+    <div className="grid grid-cols-2 gap-3 items-end lg:flex lg:flex-wrap">
+      <div className="lg:w-56">
         <label className="block text-xs text-gray-500 mb-1">Nome</label>
         <Input
           placeholder="Buscar por nome..."
           value={nameInput}
           onChange={(e) => { setNameInput(e.target.value); debouncedName(e.target.value) }}
-          className="w-56"
+          className="w-full"
         />
       </div>
-      <div>
+      <div className="lg:w-48">
         <label className="block text-xs text-gray-500 mb-1">CPF</label>
         <Input
           placeholder="Buscar por CPF..."
           value={cpfInput}
           onChange={(e) => { setCpfInput(e.target.value); debouncedCpf(e.target.value) }}
-          className="w-48"
+          className="w-full"
         />
       </div>
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => {
-          setNameInput('')
-          setCpfInput('')
-          onChange({ page: 1, pageSize: value.pageSize })
-        }}
-      >
-        Limpar
-      </Button>
+      <div className="col-span-2 lg:col-auto flex items-end">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            setNameInput('')
+            setCpfInput('')
+            onChange({ page: 1, pageSize: value.pageSize })
+          }}
+        >
+          Limpar
+        </Button>
+      </div>
     </div>
   )
 }

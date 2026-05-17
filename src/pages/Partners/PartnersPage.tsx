@@ -50,7 +50,7 @@ export function PartnersPage() {
             <TableHead>Nome</TableHead>
             <TableHead>CPF</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Telefone</TableHead>
+            <TableHead className="hidden lg:table-cell">Telefone</TableHead>
             <TableHead>Status</TableHead>
             <TableHead />
           </TableRow>
@@ -61,7 +61,7 @@ export function PartnersPage() {
               <TableCell><Skeleton className={`h-4 rounded ${i % 3 === 0 ? 'w-32' : i % 3 === 1 ? 'w-40' : 'w-28'}`} /></TableCell>
               <TableCell><Skeleton className="h-4 w-28 rounded" /></TableCell>
               <TableCell><Skeleton className={`h-4 rounded ${i % 2 === 0 ? 'w-48' : 'w-40'}`} /></TableCell>
-              <TableCell><Skeleton className="h-4 w-24 rounded" /></TableCell>
+              <TableCell className="hidden lg:table-cell"><Skeleton className="h-4 w-24 rounded" /></TableCell>
               <TableCell><Skeleton className="h-6 w-16 rounded-md" /></TableCell>
               <TableCell><Skeleton className="h-8 w-16 rounded-md" /></TableCell>
             </TableRow>
@@ -80,7 +80,7 @@ export function PartnersPage() {
               <TableCell className="font-medium">{partner.name ?? '—'}</TableCell>
               <TableCell className="font-mono text-sm">{partner.document ? formatCpf(partner.document) : '—'}</TableCell>
               <TableCell className="text-sm text-gray-600">{partner.email ?? '—'}</TableCell>
-              <TableCell className="text-sm text-gray-600">{partner.phone ?? '—'}</TableCell>
+              <TableCell className="hidden lg:table-cell text-sm text-gray-600">{partner.phone ?? '—'}</TableCell>
               <TableCell>
                 <StatusBadge status={partner.status} label={PARTNER_STATUS_LABEL[partner.status]} />
               </TableCell>
@@ -111,7 +111,7 @@ export function PartnersPage() {
       </Table>
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-gray-500">
             Total: {data?.totalCount} parceiros
           </p>
