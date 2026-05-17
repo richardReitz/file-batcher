@@ -9,6 +9,7 @@ export function useIgnoreItem(fileBatchId: string) {
     mutationFn: (itemId: string) => ignoreItem(fileBatchId, itemId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['items', fileBatchId] })
+      queryClient.invalidateQueries({ queryKey: ['batch', fileBatchId] })
       toast({ variant: 'success', title: 'Item ignorado', description: 'O item não será processado.' })
     },
   })
