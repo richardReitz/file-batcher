@@ -41,7 +41,13 @@ export function ItemList({ fileBatchId, batchStatus }: ItemListProps) {
   return (
     <>
       {!isLoading && items && (
-        <ItemSummaryBar items={items} isFetching={isFetching} />
+        <ItemSummaryBar
+          items={items}
+          isFetching={isFetching && (
+            batchStatus === 'PROCESSING' ||
+            items.some((i) => i.status === 'PENDING')
+          )}
+        />
       )}
 
       <Table>

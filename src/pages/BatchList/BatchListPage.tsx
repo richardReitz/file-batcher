@@ -19,7 +19,8 @@ export function BatchListPage() {
   const { data: batches, isLoading, isError } = useBatches(filters)
   const startProcessing = useStartProcessing()
 
-  const hasImported = batches?.some((b) => b.status === 'IMPORTED') ?? false
+  const importedCount = batches?.filter((b) => b.status === 'IMPORTED').length ?? 0
+  const hasImported = importedCount > 0
   const isProcessing = batches?.some((b) => b.status === 'PROCESSING') ?? false
 
   return (
@@ -42,7 +43,9 @@ export function BatchListPage() {
               ) : (
                 <>
                   <Play className="w-4 h-4 sm:mr-2" />
-                  <span className="hidden sm:inline">Iniciar Processamento</span>
+                  <span className="hidden sm:inline">
+                    Iniciar Processamento{importedCount > 1 ? ` (${importedCount})` : ''}
+                  </span>
                 </>
               )}
             </Button>
