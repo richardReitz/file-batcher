@@ -11,5 +11,8 @@ export function useDeactivatePartner() {
       queryClient.invalidateQueries({ queryKey: ['partners'] })
       toast({ variant: 'success', title: 'Parceiro inativado', description: 'O parceiro foi removido do sistema.' })
     },
+    onError: (e: Error) => {
+      toast({ variant: 'destructive', title: 'Erro ao inativar parceiro', description: e.message })
+    },
   })
 }

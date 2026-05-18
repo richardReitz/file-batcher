@@ -12,5 +12,8 @@ export function useCancelBatch(id: string) {
       queryClient.invalidateQueries({ queryKey: ['batches'] })
       toast({ variant: 'success', title: 'Lote cancelado', description: 'O lote foi cancelado com sucesso.' })
     },
+    onError: (e: Error) => {
+      toast({ variant: 'destructive', title: 'Erro ao cancelar lote', description: e.message })
+    },
   })
 }

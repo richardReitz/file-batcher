@@ -13,5 +13,8 @@ export function useRetryBatch(id: string) {
       queryClient.invalidateQueries({ queryKey: ['items', id] })
       toast({ variant: 'success', title: 'Lote enviado para reprocessamento', description: 'Os itens com erro voltaram para pendente.' })
     },
+    onError: (e: Error) => {
+      toast({ variant: 'destructive', title: 'Erro ao reprocessar lote', description: e.message })
+    },
   })
 }

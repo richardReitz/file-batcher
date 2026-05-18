@@ -15,5 +15,8 @@ export function useStartProcessing() {
       queryClient.invalidateQueries({ queryKey: ['batch'] })
       toast({ variant: 'success', title: 'Processamento concluído', description: 'Os itens foram processados.' })
     },
+    onError: (e: Error) => {
+      toast({ variant: 'destructive', title: 'Erro ao iniciar processamento', description: e.message })
+    },
   })
 }

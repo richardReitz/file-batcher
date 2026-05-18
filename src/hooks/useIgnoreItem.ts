@@ -12,5 +12,8 @@ export function useIgnoreItem(fileBatchId: string) {
       queryClient.invalidateQueries({ queryKey: ['batch', fileBatchId] })
       toast({ variant: 'success', title: 'Item ignorado', description: 'O item não será processado.' })
     },
+    onError: (e: Error) => {
+      toast({ variant: 'destructive', title: 'Erro ao ignorar item', description: e.message })
+    },
   })
 }

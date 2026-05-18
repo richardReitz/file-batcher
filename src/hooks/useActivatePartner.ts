@@ -11,5 +11,8 @@ export function useActivatePartner() {
       queryClient.invalidateQueries({ queryKey: ['partners'] })
       toast({ variant: 'success', title: 'Parceiro ativado', description: 'O parceiro está ativo no sistema.' })
     },
+    onError: (e: Error) => {
+      toast({ variant: 'destructive', title: 'Erro ao ativar parceiro', description: e.message })
+    },
   })
 }
