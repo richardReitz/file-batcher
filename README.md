@@ -10,19 +10,23 @@ npm install
 
 ## Configuração
 
-Crie um arquivo `.env.local` na raiz do projeto:
+Copie o arquivo de exemplo e ajuste se necessário:
+
+```bash
+cp .env.example .env.local
+```
+
+O arquivo `.env.local` deve ter `VITE_API_BASE_URL` vazio para desenvolvimento:
 
 ```
 VITE_API_BASE_URL=
 ```
 
-Deixando `VITE_API_BASE_URL` vazio, a aplicação usa o proxy do Vite em desenvolvimento para contornar CORS — as requisições para `/api/*` são redirecionadas para `https://filebatcher.onrender.com`.
+Com o valor vazio, o proxy do Vite redireciona `/api/*` para `https://filebatcher.onrender.com`, contornando CORS em desenvolvimento.
 
-Para produção ou deploy estático, defina a URL completa da API:
+Para produção, o arquivo `.env.production` já está configurado no repositório com a URL da API. Não é necessário nenhuma configuração adicional para deploy estático no Vercel, Netlify ou Cloudflare Pages.
 
-```
-VITE_API_BASE_URL=https://filebatcher.onrender.com
-```
+> **Nota sobre CORS:** em `npm run preview` (build local), as requisições vão direto para a API sem o proxy, e o browser bloqueará por CORS — isso é esperado. O comportamento correto só ocorre com um deploy real, onde o domínio esteja na whitelist da API.
 
 ## Rodando em desenvolvimento
 

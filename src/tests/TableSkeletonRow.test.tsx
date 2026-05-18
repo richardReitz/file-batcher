@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 import { Table, TableBody } from '@/components/ui/table'
 import { TableSkeletonRow } from '@/components/ui/table-skeleton-row'
