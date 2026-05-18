@@ -3,6 +3,11 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import type { BatchListParams, BatchStatus, BatchAction } from '@/types/batch'
 
+function isoToLocalDateInput(iso: string): string {
+  const d = new Date(iso)
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
 interface BatchFiltersProps {
   value: BatchListParams
   onChange: (params: BatchListParams) => void
@@ -60,8 +65,8 @@ export function BatchFilters({ value, onChange }: BatchFiltersProps) {
         <label className="block text-xs text-gray-500 mb-1">De</label>
         <Input
           type="date"
-          value={value.fromUpdatedAt?.split('T')[0] ?? ''}
-          onChange={(e) => onChange({ ...value, fromUpdatedAt: e.target.value ? `${e.target.value}T00:00:00Z` : undefined })}
+          value={value.fromUpdatedAt ? isoToLocalDateInput(value.fromUpdatedAt) : ''}
+          onChange={(e) => onChange({ ...value, fromUpdatedAt: e.target.value ? new Date(`${e.target.value}T00:00:00`).toISOString() : undefined })}
           className="w-full"
         />
       </div>
@@ -70,8 +75,8 @@ export function BatchFilters({ value, onChange }: BatchFiltersProps) {
         <label className="block text-xs text-gray-500 mb-1">Até</label>
         <Input
           type="date"
-          value={value.toUpdatedAt?.split('T')[0] ?? ''}
-          onChange={(e) => onChange({ ...value, toUpdatedAt: e.target.value ? `${e.target.value}T23:59:59Z` : undefined })}
+          value={value.toUpdatedAt ? isoToLocalDateInput(value.toUpdatedAt) : ''}
+          onChange={(e) => onChange({ ...value, toUpdatedAt: e.target.value ? new Date(`${e.target.value}T23:59:59`).toISOString() : undefined })}
           className="w-full"
         />
       </div>
