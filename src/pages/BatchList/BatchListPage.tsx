@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Plus, Play, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table'
+import { TableSkeletonRow } from '@/components/ui/table-skeleton-row'
 import { useBatches } from '@/hooks/useBatches'
 import { useStartProcessing } from '@/hooks/useStartProcessing'
 import { StatusBadge } from '@/components/StatusBadge'
@@ -77,16 +77,19 @@ export function BatchListPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isLoading && Array.from({ length: 5 }).map((_, i) => (
-            <TableRow key={i}>
-              <TableCell className="hidden sm:table-cell"><Skeleton className="h-3.5 w-24 rounded" /></TableCell>
-              <TableCell><Skeleton className="h-6 w-16 rounded-md" /></TableCell>
-              <TableCell><Skeleton className="h-6 w-20 rounded-md" /></TableCell>
-              <TableCell><Skeleton className={`h-4 rounded ${i % 2 === 0 ? 'w-36' : 'w-28'}`} /></TableCell>
-              <TableCell className="hidden lg:table-cell"><Skeleton className="h-4 w-32 rounded" /></TableCell>
-              <TableCell><Skeleton className="h-8 w-16 rounded-md" /></TableCell>
-            </TableRow>
-          ))}
+          {isLoading && (
+            <TableSkeletonRow
+              rows={5}
+              columns={[
+                { width: 'w-20', shape: 'mono', hidden: 'hidden sm:table-cell' },
+                { width: 'w-16', shape: 'badge' },
+                { width: 'w-20', shape: 'badge' },
+                { width: ['w-36', 'w-28'], shape: 'text' },
+                { width: 'w-32', shape: 'text', hidden: 'hidden lg:table-cell' },
+                { width: 'w-20', shape: 'button' },
+              ]}
+            />
+          )}
 
           {!isLoading && batches?.length === 0 && (
             <TableRow>
