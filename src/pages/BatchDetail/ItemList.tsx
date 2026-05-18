@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
+import { TableSkeletonRow } from '@/components/ui/table-skeleton-row'
 import { StatusBadge } from '@/components/StatusBadge'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { EditItemModal } from './EditItemModal'
@@ -61,19 +61,18 @@ export function ItemList({ fileBatchId, batchStatus }: ItemListProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isLoading && Array.from({ length: 5 }).map((_, i) => (
-            <TableRow key={i}>
-              <TableCell><Skeleton className={`h-4 rounded ${i % 3 === 0 ? 'w-32' : i % 3 === 1 ? 'w-40' : 'w-28'}`} /></TableCell>
-              <TableCell className="hidden sm:table-cell"><Skeleton className="h-4 w-28 rounded" /></TableCell>
-              <TableCell className="hidden lg:table-cell"><Skeleton className={`h-4 rounded ${i % 2 === 0 ? 'w-48' : 'w-40'}`} /></TableCell>
-              <TableCell><Skeleton className="h-6 w-20 rounded-md" /></TableCell>
-              <TableCell>
-                <div className="flex gap-1 whitespace-nowrap">
-                  <Skeleton className="h-8 w-14 rounded-md" />
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+          {isLoading && (
+            <TableSkeletonRow
+              rows={5}
+              columns={[
+                { width: ['w-32', 'w-40', 'w-28'], shape: 'text' },
+                { width: 'w-28', shape: 'mono', hidden: 'hidden sm:table-cell' },
+                { width: ['w-48', 'w-40'], shape: 'text', hidden: 'hidden lg:table-cell' },
+                { width: 'w-20', shape: 'badge' },
+                { width: 'w-14', shape: 'button' },
+              ]}
+            />
+          )}
 
           {!isLoading && items?.length === 0 && (
             <TableRow>
