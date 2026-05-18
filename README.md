@@ -42,6 +42,12 @@ Abre em `http://localhost:5173`.
 npx vitest run
 ```
 
+## Deploy
+
+A aplicação está publicada em: **https://file-batcher-front.vercel.app**
+
+> Para acessar o deploy em produção é necessário que o domínio `file-batcher-front.vercel.app` esteja na whitelist de origens permitidas da API. Sem essa liberação, as chamadas serão bloqueadas por CORS. Recomenda-se usar `npm run dev` para avaliação local.
+
 ## Build para produção
 
 ```bash
