@@ -3,7 +3,7 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
+import { TableSkeletonRow } from '@/components/ui/table-skeleton-row'
 import { StatusBadge } from '@/components/StatusBadge'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { PartnerFilters } from './PartnerFilters'
@@ -56,16 +56,19 @@ export function PartnersPage() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isLoading && Array.from({ length: 8 }).map((_, i) => (
-            <TableRow key={i}>
-              <TableCell><Skeleton className={`h-4 rounded ${i % 3 === 0 ? 'w-32' : i % 3 === 1 ? 'w-40' : 'w-28'}`} /></TableCell>
-              <TableCell><Skeleton className="h-4 w-28 rounded" /></TableCell>
-              <TableCell><Skeleton className={`h-4 rounded ${i % 2 === 0 ? 'w-48' : 'w-40'}`} /></TableCell>
-              <TableCell className="hidden lg:table-cell"><Skeleton className="h-4 w-24 rounded" /></TableCell>
-              <TableCell><Skeleton className="h-6 w-16 rounded-md" /></TableCell>
-              <TableCell><Skeleton className="h-8 w-16 rounded-md" /></TableCell>
-            </TableRow>
-          ))}
+          {isLoading && (
+            <TableSkeletonRow
+              rows={8}
+              columns={[
+                { width: ['w-32', 'w-40', 'w-28'], shape: 'text' },
+                { width: 'w-28', shape: 'mono' },
+                { width: ['w-48', 'w-40'], shape: 'text' },
+                { width: 'w-24', shape: 'text', hidden: 'hidden lg:table-cell' },
+                { width: 'w-16', shape: 'badge' },
+                { width: 'w-16', shape: 'button' },
+              ]}
+            />
+          )}
 
           {!isLoading && (data?.items?.length ?? 0) === 0 && (
             <TableRow>
